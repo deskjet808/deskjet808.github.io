@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Maroochy River speed zones</title>
+<meta name="description" content="The ten official MSQ Maroochy River speed limit maps joined into one pannable, zoomable view. Works offline.">
+<meta name="theme-color" content="#0e3b43">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Maroochy Zones">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<style>
+:root{
+  --paper:#e9ece6; --ink:#0e3b43; --muted:#4d6a70; --panel:#ffffffee; --line:#c9d2cf;
+  --buoy:#f2c230; --k6:#f4a7b9; --k20:#b49ad6; --k40:#7fbbe3;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#11262b;--ink:#e6f0ee;--muted:#9fb7b6;--panel:#0f2226ee;--line:#2c4a50;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#11262b;--ink:#e6f0ee;--muted:#9fb7b6;--panel:#0f2226ee;--line:#2c4a50;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%}
+body{height:100%;margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;overflow:hidden}
+#stage{position:relative;width:100%;height:100%;overflow:hidden;touch-action:none;cursor:grab}
+#stage.drag{cursor:grabbing}
+#world{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+#world img{position:absolute;display:block;user-select:none;-webkit-user-drag:none;box-shadow:0 0 0 1px rgba(0,0,0,.25)}
+#world img.on{outline:6px solid var(--buoy);outline-offset:0}
+.panel{position:absolute;background:var(--panel);border:1px solid var(--line);border-radius:10px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#head{left:calc(12px + env(safe-area-inset-left,0px));top:calc(12px + env(safe-area-inset-top,0px));width:min(380px,calc(100% - 24px));padding:14px 16px 12px}
+h1{font-size:1.15rem;font-weight:800;line-height:1.2;margin:0 0 2px;letter-spacing:-.01em}
+.sub{font-size:.8rem;color:var(--muted);margin:0 0 12px;line-height:1.4}
+.step{display:flex;align-items:stretch;gap:6px}
+.step button{flex:0 0 44px;font:inherit;font-size:1.3rem;font-weight:800;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.step button:disabled{opacity:.35;cursor:default}
+.now{flex:1;min-width:0;border-left:4px solid var(--buoy);padding:2px 0 2px 10px}
+.now b{display:block;font-size:1rem;font-weight:800}
+.now span{display:block;font-size:.78rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dir{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-top:6px}
+select{margin-top:10px;width:100%;font:inherit;font-size:.85rem;padding:7px 8px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--ink)}
+select option{color:#000}
+#zoom{right:calc(12px + env(safe-area-inset-right,0px));top:calc(12px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;overflow:hidden}
+#zoom button{width:44px;height:44px;font:inherit;font-size:1.25rem;font-weight:800;color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--line);cursor:pointer}
+#zoom button:last-child{border-bottom:0;font-size:.7rem}
+#key{left:calc(12px + env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));padding:10px 12px;font-size:.78rem;max-width:calc(100% - 24px)}
+.chips{display:flex;flex-wrap:wrap;gap:6px 12px}
+.chip{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.sw{width:22px;height:13px;border-radius:3px;border:1px solid rgba(0,0,0,.2)}
+.hatch{background:repeating-linear-gradient(135deg,#f2b25b 0 2px,transparent 2px 6px)}
+.credit{margin-top:8px;color:var(--muted);font-size:.68rem;line-height:1.4;max-width:46ch}
+button:focus-visible,select:focus-visible{outline:3px solid var(--buoy);outline-offset:2px}
+.offline{display:none;margin-top:8px;font-size:.7rem;color:var(--muted);align-items:center;gap:6px}
+.offline.show{display:flex}
+.offline::before{content:"";width:7px;height:7px;border-radius:50%;background:#3fae6a}
+@media (max-width:560px){.sub{display:none}#key .credit{font-size:.6rem;margin-top:6px}#head{width:calc(100% - 80px)}}
+</style>
+</head>
+<body>
+<div id="stage" aria-label="Joined Maroochy River speed limit maps. Drag to pan, scroll or pinch to zoom." role="application">
+  <div id="world"></div>
+</div>
+
+<div id="head" class="panel">
+  <h1>Maroochy River speed zones</h1>
+  <p class="sub">The ten official MSQ maps placed by their sign coordinates, so the river runs continuously from Yandina to Maroochy Bar.</p>
+  <div class="step">
+    <button id="prev" aria-label="Previous map, upstream">‹</button>
+    <div class="now" aria-live="polite"><b id="nowT">All maps</b><span id="nowD">Drag to explore</span></div>
+    <button id="next" aria-label="Next map, downstream">›</button>
+  </div>
+  <div class="dir"><span>Upstream</span><span id="pos"></span><span>Downstream</span></div>
+  <select id="jump" aria-label="Jump to a map"><option value="">Jump to a map…</option></select>
+  <div id="offline" class="offline" role="status">Ready offline</div>
+</div>
+
+<div id="zoom" class="panel">
+  <button id="zin" aria-label="Zoom in">+</button>
+  <button id="zout" aria-label="Zoom out">−</button>
+  <button id="fit" aria-label="Show whole river">All</button>
+</div>
+
+<div id="key" class="panel">
+  <div class="chips">
+    <span class="chip"><span class="sw" style="background:var(--k6)"></span>6 knots</span>
+    <span class="chip"><span class="sw" style="background:var(--k20)"></span>20 knots</span>
+    <span class="chip"><span class="sw" style="background:var(--k40)"></span>40 knots (30 for hire jet skis)</span>
+    <span class="chip"><span class="sw hatch"></span>No water skiing</span>
+  </div>
+  <div class="credit">Maps © The State of Queensland (Dept of Transport and Main Roads) 2012–13, CC BY-NC-ND 3.0 AU. Limits can change: the signs on the water and msq.qld.gov.au are the final word.</div>
+</div>
+
+<script>
+const MAPS = [{"id":"area1","title":"Area 1","desc":"Yandina to Browns Rocks","x":0.0,"y":271.3,"w":1856.7,"h":1428.5,"img":"maps/00.webp"},{"id":"area2","title":"Area 2","desc":"Browns Rocks to Lake Dunethin","x":1637.5,"y":725.9,"w":3202.7,"h":2464.2,"img":"maps/01.webp"},{"id":"area3","title":"Area 3","desc":"Cane train bridge","x":4549.0,"y":2261.9,"w":1222.3,"h":940.5,"img":"maps/02.webp"},{"id":"area4","title":"Area 4","desc":"Cane train bridge to Coolum Creek","x":5538.8,"y":1195.7,"w":4201.6,"h":3232.7,"img":"maps/03.webp"},{"id":"coolumcreek","title":"Coolum Creek","desc":"Tributary","x":8529.3,"y":0.0,"w":1892.4,"h":2461.4,"img":"maps/04.webp"},{"id":"area5","title":"Area 5","desc":"Bli Bli islands to David Low Bridge","x":6381.8,"y":2993.8,"w":3410.2,"h":4435.4,"img":"maps/05.webp"},{"id":"petriepayntercreek","title":"Petrie & Paynter Creeks","desc":"Tributary","x":4816.6,"y":6817.4,"w":3702.3,"h":2848.5,"img":"maps/06.webp"},{"id":"area6","title":"Area 6","desc":"David Low Bridge to Sunshine Motorway","x":7167.5,"y":7010.8,"w":2368.2,"h":3080.1,"img":"maps/07.webp"},{"id":"eudlocreek","title":"Eudlo Creek","desc":"Tributary","x":5778.6,"y":9180.5,"w":3077.1,"h":2367.5,"img":"maps/08.webp"},{"id":"area7","title":"Area 7","desc":"Sunshine Motorway to Maroochy Bar","x":9172.9,"y":6572.6,"w":4263.7,"h":5545.4,"img":"maps/09.webp"}];
+const stage = document.getElementById('stage'), world = document.getElementById('world');
+const imgs = MAPS.map((m, i) => {
+  const el = document.createElement('img');
+  el.src = m.img; el.alt = m.title + ' map: ' + m.desc; el.draggable = false;
+  Object.assign(el.style, {left: m.x + 'px', top: m.y + 'px', width: m.w + 'px', height: m.h + 'px', zIndex: i + 1});
+  world.appendChild(el);
+  const o = document.createElement('option'); o.value = i; o.textContent = m.title + ' – ' + m.desc;
+  document.getElementById('jump').appendChild(o);
+  return el;
+});
+const W = Math.max(...MAPS.map(m => m.x + m.w)), H = Math.max(...MAPS.map(m => m.y + m.h));
+let v = {x: 0, y: 0, k: 0.05}, active = -1, anim = null;
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function apply() { world.style.transform = `translate(${v.x}px,${v.y}px) scale(${v.k})`; }
+function fitBox(x, y, w, h, pad = 0.92) {
+  const r = stage.getBoundingClientRect(), L = r.width > 900 ? 404 : 0;
+  const k = Math.min((r.width - L) / w, r.height / h) * pad;
+  return {k, x: L + (r.width - L) / 2 - (x + w / 2) * k, y: r.height / 2 - (y + h / 2) * k};
+}
+const minK = () => fitBox(0, 0, W, H).k * 0.5, maxK = 4;
+function flyTo(t) {
+  cancelAnimationFrame(anim);
+  if (reduce) { v = t; apply(); pick(); return; }
+  const s = {...v}, t0 = performance.now(), dur = 650;
+  const step = now => {
+    const p = Math.min(1, (now - t0) / dur), e = p < .5 ? 2*p*p : 1 - Math.pow(-2*p + 2, 2) / 2;
+    v = {x: s.x + (t.x - s.x)*e, y: s.y + (t.y - s.y)*e, k: s.k + (t.k - s.k)*e}; apply();
+    if (p < 1) anim = requestAnimationFrame(step); else pick();
+  };
+  anim = requestAnimationFrame(step);
+}
+function zoomAt(f, cx, cy) {
+  const k = Math.max(minK(), Math.min(maxK, v.k * f)); f = k / v.k;
+  v.x = cx - (cx - v.x) * f; v.y = cy - (cy - v.y) * f; v.k = k; apply();
+}
+function setActive(i) {
+  if (i === active) return;
+  if (active >= 0) { imgs[active].classList.remove('on'); imgs[active].style.zIndex = active + 1; }
+  active = i;
+  const nowT = document.getElementById('nowT'), nowD = document.getElementById('nowD');
+  if (i < 0) { nowT.textContent = 'Whole river'; nowD.textContent = 'Zoom in or step through the maps'; document.getElementById('pos').textContent = ''; }
+  else {
+    imgs[i].classList.add('on'); imgs[i].style.zIndex = 100;
+    nowT.textContent = MAPS[i].title; nowD.textContent = MAPS[i].desc;
+    document.getElementById('pos').textContent = (i + 1) + ' of ' + MAPS.length;
+  }
+  document.getElementById('prev').disabled = i === 0;
+  document.getElementById('next').disabled = i === MAPS.length - 1;
+  document.getElementById('jump').value = i < 0 ? '' : i;
+}
+function pick() {
+  const r = stage.getBoundingClientRect();
+  if (v.k < fitBox(0, 0, W, H).k * 1.6) { setActive(-1); return; }
+  const L = r.width > 900 ? 404 : 0, cx = (L + (r.width - L) / 2 - v.x) / v.k, cy = (r.height / 2 - v.y) / v.k;
+  let best = -1, bd = Infinity;
+  MAPS.forEach((m, i) => {
+    if (cx < m.x || cx > m.x + m.w || cy < m.y || cy > m.y + m.h) return;
+    const d = Math.hypot((cx - m.x - m.w/2) / m.w, (cy - m.y - m.h/2) / m.h);
+    if (d < bd) { bd = d; best = i; }
+  });
+  if (best >= 0) setActive(best);
+}
+function go(i) { i = Math.max(0, Math.min(MAPS.length - 1, i)); setActive(i); const m = MAPS[i]; flyTo(fitBox(m.x, m.y, m.w, m.h, 0.96)); }
+
+document.getElementById('prev').onclick = () => go(active < 0 ? 0 : active - 1);
+document.getElementById('next').onclick = () => go(active < 0 ? 0 : active + 1);
+document.getElementById('jump').onchange = e => { if (e.target.value !== '') go(+e.target.value); };
+document.getElementById('fit').onclick = () => { setActive(-1); flyTo(fitBox(0, 0, W, H)); };
+const zb = f => { const r = stage.getBoundingClientRect(); cancelAnimationFrame(anim); zoomAt(f, r.width/2, r.height/2); pick(); };
+document.getElementById('zin').onclick = () => zb(1.6);
+document.getElementById('zout').onclick = () => zb(1/1.6);
+
+const pts = new Map(); let last = null, moved = 0, downAt = null;
+stage.addEventListener('pointerdown', e => {
+  stage.setPointerCapture(e.pointerId); pts.set(e.pointerId, {x: e.clientX, y: e.clientY});
+  cancelAnimationFrame(anim); stage.classList.add('drag'); moved = 0; downAt = {x: e.clientX, y: e.clientY}; last = null;
+});
+stage.addEventListener('pointermove', e => {
+  if (!pts.has(e.pointerId)) return;
+  const prev = pts.get(e.pointerId); pts.set(e.pointerId, {x: e.clientX, y: e.clientY});
+  const r = stage.getBoundingClientRect();
+  if (pts.size === 1) { v.x += e.clientX - prev.x; v.y += e.clientY - prev.y; moved += Math.abs(e.clientX - prev.x) + Math.abs(e.clientY - prev.y); apply(); }
+  else if (pts.size === 2) {
+    const [a, b] = [...pts.values()], d = Math.hypot(a.x - b.x, a.y - b.y), mx = (a.x + b.x)/2 - r.left, my = (a.y + b.y)/2 - r.top;
+    if (last) { v.x += mx - last.mx; v.y += my - last.my; zoomAt(d / last.d, mx, my); }
+    last = {d, mx, my}; moved = 99;
+  }
+});
+const up = e => {
+  pts.delete(e.pointerId); last = null;
+  if (pts.size === 0) {
+    stage.classList.remove('drag');
+    if (moved < 6 && downAt) {
+      const r = stage.getBoundingClientRect(), cx = (downAt.x - r.left - v.x) / v.k, cy = (downAt.y - r.top - v.y) / v.k;
+      const hits = MAPS.map((m, j) => j).filter(j => { const m = MAPS[j]; return cx >= m.x && cx <= m.x + m.w && cy >= m.y && cy <= m.y + m.h; });
+      if (hits.length) { const at = hits.indexOf(active); setActive(hits[(at + 1) % hits.length]); }
+    } else pick();
+  }
+};
+stage.addEventListener('pointerup', up); stage.addEventListener('pointercancel', up);
+stage.addEventListener('wheel', e => {
+  e.preventDefault(); cancelAnimationFrame(anim);
+  const r = stage.getBoundingClientRect();
+  zoomAt(Math.exp(-e.deltaY * (e.ctrlKey ? 0.01 : 0.0015)), e.clientX - r.left, e.clientY - r.top);
+  clearTimeout(stage._t); stage._t = setTimeout(pick, 120);
+}, {passive: false});
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'SELECT') return;
+  if (e.key === 'ArrowRight' && e.shiftKey || e.key === ']') go(active + 1);
+  else if (e.key === 'ArrowLeft' && e.shiftKey || e.key === '[') go(active - 1);
+  else if (e.key === '+' || e.key === '=') zb(1.4); else if (e.key === '-') zb(1/1.4);
+  else if (e.key.startsWith('Arrow')) { const s = 80; v.x += e.key === 'ArrowLeft' ? s : e.key === 'ArrowRight' ? -s : 0; v.y += e.key === 'ArrowUp' ? s : e.key === 'ArrowDown' ? -s : 0; apply(); pick(); }
+});
+addEventListener('resize', () => { if (active < 0) { v = fitBox(0, 0, W, H); apply(); } });
+v = fitBox(0, 0, W, H); apply(); setActive(-1);
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW registration failed', err));
+    if (!('caches' in window)) return;
+    const need = ['./', 'index.html', 'manifest.webmanifest'].concat(MAPS.map(m => m.img));
+    navigator.serviceWorker.ready.then(() => Promise.all(need.map(u => caches.match(new URL(u, location.href).href))))
+      .then(hits => { if (hits.every(Boolean)) document.getElementById('offline').classList.add('show'); })
+      .catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
