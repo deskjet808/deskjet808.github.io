@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>K'gari Times</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Tide Times">
+<meta name="theme-color" content="#0b5563">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#0b1110;--muted:#3f4846;--amber:#7a4d00;--amberbg:#fdeec8;--line:#ddd8cc;--good:#13603b;--goodbg:#d9f0e2;--bad:#8f2420;--badbg:#f9dedb;--accent:#0b5563}
+@media (prefers-color-scheme:dark){:root{--bg:#0c100f;--card:#161d1b;--ink:#ffffff;--muted:#c4ccc9;--amber:#ffd27a;--amberbg:#3d2f0e;--line:#2e3936;--good:#6fd39c;--goodbg:#173326;--bad:#f08c84;--badbg:#3a1d1b;--accent:#7cc7d3}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.5 -apple-system,system-ui,sans-serif}
+.home{display:flex;flex-direction:column;gap:18px;padding:calc(24px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom))}
+h1{font-size:26px;margin:0;text-align:center}
+.sub{color:var(--muted);font-size:14px;text-align:center;margin:0 0 8px}
+.btn{display:block;text-decoration:none;text-align:center;font-size:21px;font-weight:700;padding:20px 16px;border-radius:18px;background:var(--accent);color:#fff}
+@media (prefers-color-scheme:dark){.btn{color:#0d1a1c}}
+.pop{margin:0}
+.pop>summary{list-style:none;display:block;text-align:center;font-size:21px;font-weight:700;padding:20px 16px;border-radius:18px;background:var(--accent);color:#fff;cursor:pointer}
+@media (prefers-color-scheme:dark){.pop>summary{color:#0d1a1c}}
+.pop>summary::-webkit-details-marker{display:none}
+.pop>summary .t{display:block}
+.pop>summary .desc{display:block;font-size:14px;font-weight:400;line-height:1.35;margin-top:6px;opacity:1;font-size:15px}
+.pop[open]>summary{border-radius:18px 18px 0 0}
+.body{background:var(--card);border:1px solid var(--line);border-top:0;border-radius:0 0 18px 18px;padding:12px}
+h2{font-size:22px;margin:0 0 4px}
+.day{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:10px 0}
+.day h3{margin:0 0 6px;font-size:19px}
+.r{display:flex;gap:12px;padding:10px 12px;border-radius:12px;margin:6px 0;font-size:18px;font-weight:500}
+.r b{min-width:66px;font-size:14px;padding-top:3px;letter-spacing:.02em}
+.g{background:var(--goodbg)}.g b{color:var(--good)}
+.x{background:var(--badbg)}.x b{color:var(--bad)}
+.a{background:var(--amberbg)}.a b{color:var(--amber)}
+.past{opacity:.4}
+.today{border:3px solid var(--accent)!important}
+.tag{display:inline-block;font-size:12px;font-weight:700;background:var(--accent);color:var(--card);border-radius:6px;padding:2px 7px;margin-left:8px;vertical-align:2px}
+.tips h4{font-size:15px;color:var(--accent);margin:14px 0 4px;text-transform:uppercase;letter-spacing:.04em}
+.tips ul{margin:4px 0;padding-left:20px;font-size:17px}.tips li{margin:5px 0}
+.lim{width:100%;border-collapse:collapse;font-size:16px}.lim td,.lim th{padding:6px 4px;border-bottom:1px solid var(--line);text-align:left}.lim th{color:var(--muted);font-size:14px}
+#now{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px}
+#now h2{font-size:18px;margin:0 0 4px}
+#now .when{color:var(--muted);font-size:15px;margin:0 0 6px}
+.n{color:var(--muted);font-size:15px;margin:8px 0}
+</style>
+</head>
+<body>
+
+<div class="home">
+  <h1>K'gari Times</h1>
+  <p class="sub">11 to 15 Nov 2026 &middot; tides updated 10 Nov &middot; works offline &middot; tap a button to open or close</p>
+  <div id="now"><h2>Right now</h2><p class="when">Live tide status works when this page is opened in Safari. If you can only see this line, use the buttons below.</p></div>
+
+<details class="pop" name="kg">
+  <summary><span class="t">Cross Awinya Creek</span><span class="desc">Best and worst times to drive through the creek at camp. It is shallowest near low tide and deepest around high tide. Walk it first.</span></summary><div class="body">
+  <p class="n">Best = near low tide, in daylight. Worst = 2 hrs either side of high tide. First light about 4:50 am, sunset about 6:10 pm.</p>
+  <div class="day"><h3>Wed 11 Nov</h3>
+    <div class="r g"><b>BEST</b><span>2:30 pm to 6:10 pm</span></div>
+    <div class="r x"><b>WORST</b><span>7:45 am to 11:45 am &middot; 7:45 pm to 11:45 pm</span></div></div>
+  <div class="day"><h3>Thu 12 Nov</h3>
+    <div class="r g"><b>BEST</b><span>3:15 pm to 6:10 pm &middot; or 4:50 am to 5:50 am</span></div>
+    <div class="r x"><b>WORST</b><span>8:15 am to 12:15 pm &middot; 8:20 pm to 12:20 am</span></div></div>
+  <div class="day"><h3>Fri 13 Nov</h3>
+    <div class="r g"><b>BEST</b><span>4:00 pm to 6:10 pm &middot; or 4:50 am to 6:20 am</span></div>
+    <div class="r x"><b>WORST</b><span>8:50 am to 12:50 pm &middot; 8:55 pm to 12:55 am</span></div></div>
+  <div class="day"><h3>Sat 14 Nov</h3>
+    <div class="r g"><b>BEST</b><span>4:50 am to 6:50 am &middot; or 4:45 pm to 6:10 pm</span></div>
+    <div class="r x"><b>WORST</b><span>9:30 am to 1:30 pm &middot; 9:40 pm to 1:40 am</span></div></div>
+  <p class="n">From Kingfisher Bay (west coast) tides. Walk the creek before driving it.</p>
+</div></details>
+<details class="pop" name="kg">
+  <summary><span class="t">Boating at Awinya Creek</span><span class="desc">When to launch the tinny on the rising tide and when to be back in, before the water drops away over the sandbanks.</span></summary><div class="body">
+  <p class="n">Launch on the rising tide, early morning. Be back in by the time shown. Worst = near low tide, when the sandbanks are a problem. Check the wind: wind against the tide makes the bay rough.</p>
+  <div class="day"><h3>Wed 11 Nov</h3>
+    <div class="r g"><b>BEST</b><span>Launch 5:30 am to 9:30 am &middot; back in by 12:30 pm</span></div>
+    <div class="r x"><b>WORST</b><span>Around low tide: 1:20 am to 5:20 am &middot; 2:30 pm to 6:30 pm</span></div></div>
+  <div class="day"><h3>Thu 12 Nov</h3>
+    <div class="r g"><b>BEST</b><span>Launch 6:00 am to 10:00 am &middot; back in by 1:00 pm</span></div>
+    <div class="r x"><b>WORST</b><span>Around low tide: 1:50 am to 5:50 am &middot; 3:15 pm to 7:15 pm</span></div></div>
+  <div class="day"><h3>Fri 13 Nov</h3>
+    <div class="r g"><b>BEST</b><span>Launch 6:30 am to 10:45 am &middot; back in by 1:45 pm</span></div>
+    <div class="r x"><b>WORST</b><span>Around low tide: 2:20 am to 6:20 am &middot; 3:55 pm to 7:55 pm</span></div></div>
+  <div class="day"><h3>Sat 14 Nov</h3>
+    <div class="r g"><b>BEST</b><span>Launch 7:00 am to 11:30 am &middot; back in by 2:30 pm</span></div>
+    <div class="r x"><b>WORST</b><span>Around low tide: 2:55 am to 6:55 am &middot; 4:45 pm to 8:45 pm</span></div>
+    <p class="n" style="margin:6px 0 0">Clashes with the Saturday move: boating means crossing the creek in the afternoon (after 4:45 pm) and reaching the east coast around dark.</p></div>
+  <p class="n">Times worked out from Kingfisher Bay (west coast) tides, not a published launch guide. Look at the creek mouth at low tide first so you know where the channel runs. Sunday is a travel day.</p>
+</div></details>
+<details class="pop" name="kg">
+  <summary><span class="t">Fishing at Awinya Creek</span><span class="desc">The best dawn and dusk sessions each day, timed to moving water on the rising tide and the evening low.</span></summary><div class="body">
+  <p class="n">Fish moving water. Dawn on the rising tide is the best session each day; dusk around the evening low is the second.</p>
+  <div class="day"><h3>Wed 11 Nov</h3>
+    <div class="r g"><b>DAWN</b><span>4:50 am to 8:45 am (if you are there)</span></div>
+    <div class="r g"><b>DUSK</b><span>4:00 pm to 6:30 pm</span></div>
+  </div>
+  <div class="day"><h3>Thu 12 Nov</h3>
+    <div class="r g"><b>DAWN</b><span>4:50 am to 9:15 am</span></div>
+    <div class="r g"><b>DUSK</b><span>4:45 pm to 6:30 pm</span></div>
+  </div>
+  <div class="day"><h3>Fri 13 Nov</h3>
+    <div class="r g"><b>DAWN</b><span>4:50 am to 9:45 am</span></div>
+    <div class="r g"><b>DUSK</b><span>5:30 pm to last light</span></div>
+  </div>
+  <div class="day"><h3>Sat 14 Nov</h3>
+    <div class="r x"><b>MOVE</b><span>Moving day. Dawn is your creek crossing window, so no fishing at Awinya Creek</span></div>
+  </div>
+  <div class="day tips"><h3>Tips for first-timers</h3>
+    <div class="r x"><b>RULE</b><span>Awinya Creek is a freshwater creek. Fishing and bait collecting are banned in K'gari's freshwater lakes and streams, so fish the saltwater: the beach, the creek mouth and from the boat.</span></div>
+    <div class="r a"><b>ZONES</b><span>This is Great Sandy Marine Park. No fishing in green zones; line fishing limits in yellow buffer zones. Download the Qld Fishing 2.0 app and check the zoning map before you go.</span></div>
+    <h4>Where and when</h4>
+    <ul>
+      <li><b>First light on the rising tide</b> is the best bite. Flats look bare at low tide and fill with fish as the water comes in.</li>
+      <li><b>Creek mouth drop-offs:</b> flathead sit on the edge where shallow sand drops into deeper water.</li>
+      <li><b>Shallow sand flats:</b> bream, whiting and trevally push up onto the flats as they flood. Queenfish cruise the edges of the western flats.</li>
+      <li><b>From the boat:</b> Platypus Bay reefs can hold snapper and nannygai around the new moon (9 Nov), plus mackerel.</li>
+      <li><b>If it goes quiet,</b> move to another part of the flat or mouth rather than waiting.</li>
+      <li>The west side is sheltered from easterly winds, so it is often fishable when the east beach is blown out.</li>
+    </ul>
+    <h4>What to use</h4>
+    <ul>
+      <li><b>Bait:</b> pipis, beach worms, prawns and pilchards are the usual K'gari baits.</li>
+      <li><b>Lures:</b> small soft plastics and prawn imitations for flathead and bream; a surface pencil or popper walked slowly across the flats for trevally and pike; a small diving lure trolled along drop-offs for flathead.</li>
+      <li><b>Tackle:</b> light gear (about 2 kg line) is plenty on the flats. A fast outgoing tide makes fish hard to control on light gear.</li>
+    </ul>
+    <h4>Likely catch</h4>
+    <p class="n" style="margin:2px 0">Whiting, bream, flathead, dart, mullet, garfish, trevally, queenfish. Also mud crabs, rays, shovelnose sharks and turtles around.</p>
+    <h4>Size and possession limits</h4>
+    <table class="lim"><tr><th>Fish</th><th>Size</th><th>Keep</th></tr>
+      <tr><td>Sand whiting</td><td>23 cm min</td><td>30 (all whiting)</td></tr>
+      <tr><td>Yellowfin bream</td><td>25 cm min</td><td>30 (all bream)</td></tr>
+      <tr><td>Dusky flathead</td><td>40 to 75 cm</td><td>5</td></tr>
+      <tr><td>Dart</td><td>30 cm min</td><td>30</td></tr>
+      <tr><td>Snapper</td><td>35 cm min</td><td>4 (1 over 70 cm)</td></tr>
+      <tr><td>Tailor</td><td>35 cm min</td><td>20</td></tr>
+      <tr><td>Trevally (all)</td><td>None</td><td>20</td></tr>
+      <tr><td>Mud crab</td><td>15 cm min</td><td>7 each (14 per boat)</td></tr>
+    </table>
+    <h4>Camp and boat</h4>
+    <ul>
+      <li>Bring a measuring ruler. No recreational fishing licence is needed in Queensland.</li>
+      <li>Clean fish away from camp and lock away bait and scraps (dingoes). Fines over $2,000.</li>
+      <li>Go slow over the flats: turtles and dugongs feed there.</li>
+      <li>Wind against the tide makes the bay rough. Be back in before the water drops away.</li>
+    </ul>
+  </div>
+  <p class="n">Worked out from Kingfisher Bay (west coast) tides and first light about 4:50 am, sunset about 6:10 pm. Lock away bait and fish scraps; clean fish away from camp (dingoes).</p>
+</div></details>
+<details class="pop" name="kg">
+  <summary><span class="t">Awinya Creek to Orchid Beach (west coast)</span><span class="desc">Best and worst times to drive north along the west beach from camp. Check the route is open before you go.</span></summary><div class="body">
+  <p class="n">Drive the west beach within 2 hrs of low tide, in daylight. Stay off 2 hrs either side of high tide. Sunset about 6:10 pm.</p>
+  <div class="day"><h3>Wed 11 Nov</h3>
+    <div class="r g"><b>BEST</b><span>2:30 pm to 6:10 pm</span></div>
+    <div class="r x"><b>WORST</b><span>7:45 am to 11:45 am &middot; 7:45 pm to 11:45 pm</span></div></div>
+  <div class="day"><h3>Thu 12 Nov</h3>
+    <div class="r g"><b>BEST</b><span>3:15 pm to 6:10 pm &middot; or 4:50 am to 5:50 am</span></div>
+    <div class="r x"><b>WORST</b><span>8:15 am to 12:15 pm &middot; 8:20 pm to 12:20 am</span></div></div>
+  <div class="day"><h3>Fri 13 Nov</h3>
+    <div class="r g"><b>BEST</b><span>4:00 pm to 6:10 pm &middot; or 4:50 am to 6:20 am</span></div>
+    <div class="r x"><b>WORST</b><span>8:50 am to 12:50 pm &middot; 8:55 pm to 12:55 am</span></div></div>
+  <div class="day"><h3>Sat 14 Nov</h3>
+    <div class="r g"><b>BEST</b><span>4:50 am to 6:50 am &middot; or 4:45 pm to 6:10 pm</span></div>
+    <div class="r x"><b>WORST</b><span>9:30 am to 1:30 pm &middot; 9:40 pm to 1:40 am</span></div></div>
+  <p class="n">From Kingfisher Bay (west coast) tides. Not confirmed that the west beach runs all the way to Orchid Beach: check the QPWS map and conditions report. Go with another vehicle where you can.</p>
+</div></details>
+<details class="pop" name="kg">
+  <summary><span class="t">Saturday: Awinya Creek to east coast camp</span><span class="desc">Step-by-step plan to cross the creek early, take the inland tracks, and drive the east beach to camp before dark.</span></summary><div class="body">
+  <p class="n">Cross the creek near the early low tide, go inland (tides do not matter on the tracks), then drive the east beach in the afternoon window and be at camp before sunset.</p>
+  <div class="day"><h3>Sat 14 Nov plan</h3>
+    <div class="r g"><b>1</b><span>First light to 6:50 am: cross Awinya Creek (low 4:54 am)</span></div>
+    <div class="r g"><b>2</b><span>Morning: inland tracks east via Awinya Creek Rd and Lake Allom</span></div>
+    <div class="r x"><b>WAIT</b><span>Stay off the east beach 8:50 am to 12:50 pm (high 10:48 am at Eurong)</span></div>
+    <div class="r g"><b>3</b><span>3:50 pm to 6:10 pm: drive the east beach to camp (low 5:49 pm at Eurong)</span></div>
+    <div class="r x"><b>AVOID</b><span>Crossing the creek 9:30 am to 1:30 pm (high 11:29 am)</span></div>
+  </div>
+  <p class="n">If the inland run is short, fill the wait at a lake or stop off the beach. Camp must be booked with a QPWS camping permit. East beach times are from Eurong tides.</p>
+</div></details>
+<details class="pop" name="kg">
+  <summary><span class="t">Sunday: east coast to Hook Point (early)</span><span class="desc">When to drive the east beach down to the Inskip barge at Hook Point. Sunday plan: leave early on the low tide, or use the inland Bypass Road.</span></summary><div class="body">
+  <p class="n">East beach. About 1 hr 15 min at low tide. Drive within 2 hrs of low tide, in daylight. Last barge off Hook Point about 5:15 pm.</p>
+  <div class="day"><h3>Wed 11 Nov</h3>
+    <div class="r g"><b>BEST</b><span>1:20 pm to 5:20 pm (low 3:21 pm)</span></div>
+    <div class="r x"><b>WORST</b><span>7:00 am to 11:00 am (high 8:57 am)</span></div></div>
+  <div class="day"><h3>Thu 12 Nov</h3>
+    <div class="r g"><b>BEST</b><span>2:05 pm to 6:05 pm (low 4:06 pm)</span></div>
+    <div class="r x"><b>WORST</b><span>7:30 am to 11:30 am (high 9:31 am)</span></div></div>
+  <div class="day"><h3>Fri 13 Nov</h3>
+    <div class="r g"><b>BEST</b><span>2:55 pm to 6:10 pm (low 4:56 pm)</span></div>
+    <div class="r x"><b>WORST</b><span>8:10 am to 12:10 pm (high 10:08 am)</span></div></div>
+  <div class="day"><h3>Sat 14 Nov</h3>
+    <div class="r g"><b>BEST</b><span>3:50 pm to 6:10 pm (low 5:49 pm)</span></div>
+    <div class="r x"><b>WORST</b><span>8:50 am to 12:50 pm (high 10:48 am)</span></div></div>
+  <div class="day"><h3>Sun 15 Nov (going home early)</h3>
+    <div class="r g"><b>BEST</b><span>Leave Eurong first light (about 4:50 am) to 6:15 am. Low tide 4:16 am. Barge runs from about 6:00 am</span></div>
+    <div class="r a"><b>OK</b><span>Leave 6:15 am to 7:15 am: tide coming in, go slow, turn back if washouts look deep</span></div>
+    <div class="r x"><b>AFTER 7:15</b><span>Take the inland Bypass Road (about 1 hr 30 min, no tide issues) instead of the beach</span></div>
+    <div class="r x"><b>WORST</b><span>9:35 am to 1:35 pm (high tide 11:34 am)</span></div>
+    <p class="n" style="margin:6px 0 0">Washouts south of Eurong are only passable at low tide. Beach run takes about 1 hr 15 min.</p></div>
+  <p class="n">From Eurong tides (WillyWeather, Bureau of Meteorology data). Running late or rough beach: take the inland Bypass Road.</p>
+</div></details>
+</div>
+
+<script>
+(function(){
+function D(d,h,m){return new Date(2026,10,d,h,m);}
+var W=[['L',10,15,53],['H',10,21,14],['L',11,3,19],['H',11,9,43],['L',11,16,33],['H',11,21,46],['L',12,3,49],['H',12,10,15],['L',12,17,14],['H',12,22,19],['L',13,4,20],['H',13,10,49],['L',13,17,56],['H',13,22,55],['L',14,4,54],['H',14,11,29],['L',14,18,44],['H',14,23,38],['L',15,5,33],['H',15,12,21],['L',15,19,38]];
+var E=[['L',11,1,49],['H',11,8,57],['L',11,15,21],['H',11,20,49],['L',12,2,21],['H',12,9,31],['L',12,16,6],['H',12,21,27],['L',13,2,55],['H',13,10,8],['L',13,16,56],['H',13,22,6],['L',14,3,32],['H',14,10,48],['L',14,17,49],['H',14,22,52],['L',15,4,16],['H',15,11,34],['L',15,18,47],['H',15,23,50]];
+function ev(a){return a.map(function(x){return {t:x[0],d:D(x[1],x[2],x[3]),est:!!x[4]};});}
+W=ev(W);E=ev(E);
+function fmt(d){var h=d.getHours(),m=d.getMinutes(),ap=h<12?'am':'pm';h=h%12||12;return h+':'+(m<10?'0':'')+m+' '+ap;}
+var day=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function status(list,now,name){
+ var next=null,prev=null;for(var i=0;i<list.length;i++){if(list[i].d>now){next=list[i];prev=list[i-1];break;}}
+ if(!next||!prev){return '<div class="r a"><b>'+name+'</b><span>No tide data for right now (trip times cover Wed 11 to Sun 15 Nov)</span></div>';}
+ var H=36e5,dl=1e9,dh=1e9;list.forEach(function(e){var x=Math.abs(e.d-now);if(e.t=='L')dl=Math.min(dl,x);else dh=Math.min(dh,x);});
+ var hr=now.getHours()+now.getMinutes()/60,dark=(hr<4.83||hr>18.17);
+ var c,txt;
+ if(dh<=2*H){c='x';txt='STAY OFF: near high tide';}
+ else if(dl<=2*H){c=dark?'a':'g';txt=dark?'Near low tide, but dark':'GOOD: near low tide';}
+ else{c='a';txt='Borderline: mid tide';}
+ var dir=next.t=='H'?'Rising':'Falling';
+ return '<div class="r '+c+'"><b>'+name+'</b><span>'+txt+'. '+dir+'. Next '+(next.t=='H'?'high':'low')+' '+fmt(next.d)+(next.est?' (estimate)':'')+'</span></div>';
+}
+function draw(){
+ var now=new Date(),el=document.getElementById('now');if(!el)return;
+ el.innerHTML='<h2>Right now</h2><p class="when">'+day[now.getDay()]+' '+now.getDate()+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()]+' &middot; '+fmt(now)+'</p>'+status(W,now,'WEST')+status(E,now,'EAST')+'<p class="n" style="margin:6px 0 0">West = Awinya Creek, crossing and west beach. East = Eurong to Hook Point (Eurong tides). Uses your phone clock and the tides on this page.</p>';
+}
+draw();setInterval(draw,60000);
+// 4. today highlight, past days greyed
+try{var now=new Date();if(now.getFullYear()===2026&&now.getMonth()===10){var td=now.getDate();
+document.querySelectorAll('.day h3').forEach(function(h){var m=h.textContent.match(/(\d{1,2}) Nov/);if(!m)return;var n=+m[1],box=h.parentNode;
+ if(n<td)box.classList.add('past');else if(n===td){box.classList.add('today');h.insertAdjacentHTML('beforeend','<span class="tag">TODAY</span>');}});}}catch(e){}
+})();
+</script>
+<script>
+try{var ds=document.querySelectorAll('details.pop');ds.forEach(function(d){d.addEventListener('toggle',function(){if(d.open){ds.forEach(function(o){if(o!==d)o.open=false;});d.scrollIntoView({block:'start'});}});});}catch(e){}
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function (e) { console.warn('SW registration failed', e); });
+  });
+}
+</script>
+</body>
+</html>
