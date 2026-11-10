@@ -1,6 +1,6 @@
 /* Trip tide times: offline service worker.
    Bump CACHE when any precached file changes so clients pick up the new version. */
-const CACHE = 'tides-v2';
+const CACHE = 'tides-v3';
 const PRECACHE = [
   './',
   'index.html',
