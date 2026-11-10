@@ -45,6 +45,8 @@ h2{font-size:22px;margin:0 0 4px}
 .tips h4{font-size:15px;color:var(--accent);margin:14px 0 4px;text-transform:uppercase;letter-spacing:.04em}
 .tips ul{margin:4px 0;padding-left:20px;font-size:17px}.tips li{margin:5px 0}
 .lim{width:100%;border-collapse:collapse;font-size:16px}.lim td,.lim th{padding:6px 4px;border-bottom:1px solid var(--line);text-align:left}.lim th{color:var(--muted);font-size:14px}
+.mapctl{display:flex;gap:8px;margin:0 0 8px}.mapctl button{flex:1;font-size:22px;font-weight:800;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.mapbox{overflow:auto;height:72vh;border-radius:12px;border:1px solid var(--line);background:#fff;-webkit-overflow-scrolling:touch}.mapbox img{display:block;width:100%;height:auto;max-width:none}
 #now{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px}
 #now h2{font-size:18px;margin:0 0 4px}
 #now .when{color:var(--muted);font-size:15px;margin:0 0 6px}
@@ -204,6 +206,12 @@ h2{font-size:22px;margin:0 0 4px}
     <p class="n" style="margin:6px 0 0">Washouts south of Eurong are only passable at low tide. Beach run takes about 1 hr 15 min.</p></div>
   <p class="n">From Eurong tides (WillyWeather, Bureau of Meteorology data). Running late or rough beach: take the inland Bypass Road.</p>
 </div></details>
+<details class="pop" name="kg">
+  <summary><span class="t">K'gari map</span><span class="desc">The official Queensland Parks map of the whole island: inland tracks, camping areas, barge landings and no-vehicle beach zones. Tap + or pinch to zoom.</span></summary><div class="body">
+  <div class="mapctl"><button type="button" id="mzout" aria-label="Zoom out">&minus;</button><button type="button" id="mzfit">Fit</button><button type="button" id="mzin" aria-label="Zoom in">+</button></div>
+  <div class="mapbox" id="mapbox"><img id="mapimg" src="map/kgari-map.webp" width="2481" height="3508" alt="K'gari Fraser Island Recreation Area map showing roads, tracks, camping areas and barge landings"></div>
+  <p class="n">Map: Queensland Parks and Wildlife Service (QPWS), K'gari, Fraser Island Recreation Area map, Great Sandy National Park. &copy; State of Queensland. Saved for offline use. Does not show your GPS location.</p>
+</div></details>
 </div>
 
 <script>
@@ -247,6 +255,13 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(function (e) { console.warn('SW registration failed', e); });
   });
 }
+</script>
+<script>
+(function(){var box=document.getElementById('mapbox'),img=document.getElementById('mapimg');if(!box||!img)return;
+var steps=[100,150,200,300,400],i=0;
+function set(n){n=Math.max(0,Math.min(steps.length-1,n));if(n===i)return;var cx=(box.scrollLeft+box.clientWidth/2)/box.scrollWidth,cy=(box.scrollTop+box.clientHeight/2)/box.scrollHeight;i=n;img.style.width=steps[i]+'%';box.scrollLeft=cx*box.scrollWidth-box.clientWidth/2;box.scrollTop=cy*box.scrollHeight-box.clientHeight/2;}
+document.getElementById('mzin').onclick=function(){set(i+1)};document.getElementById('mzout').onclick=function(){set(i-1)};document.getElementById('mzfit').onclick=function(){i=1;set(0)};
+img.addEventListener('dblclick',function(){set(i<steps.length-1?i+1:0)});})();
 </script>
 </body>
 </html>
